@@ -17,16 +17,20 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>归档: 2022 | Blog</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Chenxb&#39;s Blog">
-<meta property="og:url" content="http://example.com/archives/2022/index.html">
+  <title>垃圾收集（GC） | Blog</title>
+  <meta name="description" content="垃圾收集（GC）:one:哪些内存需要回收 :two:什么时候回收 :three:如何回收 对象已死？在堆里面存放着Java世界中几乎所有的对象实例，垃圾收集器在对堆进行回收之前，第一件事就是要确定这些对象中哪些还“存活”着，哪些已经“死去”  引用计数算法 很多教科书判断对象是否存活的算法是：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="垃圾收集（GC）">
+<meta property="og:url" content="http://example.com/2022/06/20/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%EF%BC%88GC%EF%BC%89/index.html">
 <meta property="og:site_name" content="Chenxb&#39;s Blog">
+<meta property="og:description" content="垃圾收集（GC）:one:哪些内存需要回收 :two:什么时候回收 :three:如何回收 对象已死？在堆里面存放着Java世界中几乎所有的对象实例，垃圾收集器在对堆进行回收之前，第一件事就是要确定这些对象中哪些还“存活”着，哪些已经“死去”  引用计数算法 很多教科书判断对象是否存活的算法是：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-20T11:44:30.000Z">
+<meta property="article:modified_time" content="2022-07-16T10:43:05.425Z">
 <meta property="article:author" content="chenxb">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/archives/2022/index.html">
+  <link rel="canonical" href="http://example.com/2022/06/20/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%EF%BC%88GC%EF%BC%89/index.html">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -261,164 +265,146 @@
   
   
 <main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">归档: 2022</h1>
-	      <p class="text-muted">共 17 篇文章</p>
-	    </header>
-	    <div class="article-body">
-	      
-  
-  
+  <div class="content">
+  <article id="post-垃圾收集（GC）" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      垃圾收集（GC）
+    </h1>
+  
+
       
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2022" aria-expanded="true">
-              <i class="icon icon-calendar-plus text-active"></i><i class="icon icon-calendar-minus text"></i>
-              2022
-            </a>
-            <!-- <a href="/archives/2022" class="archive-year">2022</a> -->
-          </h3>
-        </div>
-        <div id="collapse2022" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2022">
-        <div class="panel-body">
-          <div class="collection">
-    
-    
-<a href="/2022/06/20/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%EF%BC%88GC%EF%BC%89/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-20T11:44:30.000Z" itemprop="datePublished">2022-06-20</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 垃圾收集（GC）
-</a>
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/06/20/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%EF%BC%88GC%EF%BC%89/" class="article-date">
+	  <time datetime="2022-06-20T11:44:30.000Z" itemprop="datePublished">2022-06-20</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JVM/">JVM</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/20/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%EF%BC%88GC%EF%BC%89/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h4 id="垃圾收集（GC）"><a href="#垃圾收集（GC）" class="headerlink" title="垃圾收集（GC）"></a>垃圾收集（GC）</h4><p>:one:哪些内存需要回收</p>
+<p>:two:什么时候回收</p>
+<p>:three:如何回收</p>
+<h5 id="对象已死？"><a href="#对象已死？" class="headerlink" title="对象已死？"></a>对象已死？</h5><p>在堆里面存放着Java世界中几乎所有的对象实例，垃圾收集器在对堆进行回收之前，第一件事就是要确定这些对象中哪些还“存活”着，哪些已经“死去”</p>
+<ol>
+<li><p>引用计数算法</p>
+<p>很多教科书判断对象是否存活的算法是：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数器为零的对象就是不可能再被使用的</p>
+<p>但是，在Java领域，至少主流的Java虚拟机里面都没有选用引用计数器来管理内存，主要原因是，这个看似简单的算法里有很多例外的情况要考虑，比如单纯的引用计数就很难解决对象之间相互循环引用的问题</p>
+</li>
+<li><p>可达性分析算法</p>
+<p>当前主流的商用程序语言的内存管理子系统都是通过可达性分析算法来判定对象是否存活的。这个算法的基本思路就是通过一系列称为“GC Roots”的根对象作为起始节点集，从这些节点开始，根据引用关系向下搜索，搜索过程所走过的路径称为“引用链”，如果某个对象到GC Roots间没有任何引用链相连，则证明此对象是不可能再被使用的</p>
+</li>
+</ol>
+<h5 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h5><ol>
+<li><p>分代收集理论</p>
+<p>当前商业虚拟机的垃圾收集器，大多数遵循了“分代收集”的理论进行设计，它建立在两个分代假说之上：</p>
+<ul>
+<li>弱分代假说：绝大多数对象都是朝生夕灭的</li>
+<li>强分代假说：熬过越多次垃圾收集过程的对象就越难以消亡</li>
+</ul>
+<p>这两个分代假说共同奠定了多款常用的垃圾收集器的一致的设计原则：收集器应该将Java堆划分出不同的区域，然后将回收对象依据其年龄（年龄即对象熬过垃圾收集过程的次数）分配到不同的区域中存储</p>
+<p>把分代收集理论具体放到现在的商用Java虚拟机里面，设计者一般至少会把Java堆划分为新生代和老年代两个区域。顾名思义，在新生代中，每次垃圾收集时都会发现有大批对象死去，而每次回收后存活的少量对象，将会逐步老年代中存放</p>
+<p>假如要现在进行一次只局限于新生代区域内的收集，但新生代中的对象是完全可能被老年代所引用的，为了找出该区域的存活对象，不得不在固定的GC Roots之外，再额外遍历整个老年代中所有的对象来确保可达性分析结果的正确性，反过来也是一样。虽然理论可行，但是无疑会为内存回收带来很大的性能负担。由此，可以引出第三个分代假说：</p>
+<ul>
+<li>跨代引用假说：跨代引用相对于同代引用来说仅占极少数</li>
+</ul>
+<p>根据这条假说，我们就不应该为了少量的跨代引用去扫描整个老年代</p>
+</li>
+<li><p>标记-清除算法</p>
+<p>最早出现也是最基础的垃圾收集算法。如它的名字一样，算法分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后，统一回收掉所有被标记的对象。当然，也可以反过来</p>
+<p>缺点：</p>
+<ul>
+<li>执行效率不稳定，如果Java堆中包含大量的对象，而且其中大部分是要被回收的，这时候必须进行大量的标记和清除的动作，导致执行效率随对象的增长而降低</li>
+<li>内存空间碎片化的问题，标记、清除后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后程序运行时需要分配较大对象内存时找不到足够的连续内存</li>
+</ul>
+</li>
+<li><p>标记-复制算法</p>
+<p>1969年Fenichel提出了一种称为“半区复制”的垃圾收集算法，它将可用内存按容量分为大小相等的两块，每次只使用其中的一块。当这一块的内存用完了，就将还活着的对象复制到另一块上面，然后再把已使用过的内存空间一次性清理掉。</p>
+<p>缺点：</p>
+<ul>
+<li>将可用内存缩小了原来的一半，空间浪费太多了</li>
+</ul>
+<p>IBM公司曾有一项专门研究对新生代“朝生夕灭”的特点做了更量化的诠释——新生代中的对象有98%熬不过第一轮的收集，因此并不需要按照1：1的比例来划分新生代的内存空间</p>
+<p>1989年，Andrew Appel针对这一特点，提出了一种更优化的半区复制分代策略，现称为“Appel式回收”。具体做法是把新生代分为一块较大的Eden空间和两块较小的Survivor空间，每次分配内存只使用Eden和其中一块Survivor。发生垃圾收集时，将Eden和Survivor中存活的对象一次性复制到另一块Survivor中，然后直接清理掉这两块已经使用过的空间。HotSpot虚拟机默认Eden和Survivor的大小比例为8：1。当Survivor空间不足以容纳一次GC后存活的对象，就需要依赖其他内存区域（实际上大多是老年代）进行分配担保</p>
+</li>
+<li><p>标记-整理算法</p>
+<p>标记-复制算法在对象存活率较高的时候就要进行较多的复制操作，效率会降低。更关键的是，如果不想浪费50%的空间，就需要有额外的空间进行分配担保，所以老年代一般不能直接选用这种算法</p>
+<p>针对老年代对象的存亡特征，1974年Edward Lueders提出了另外一种有针对性的“标记-整理”算法，其中的标记过程与“标记-清除”算法一样，但后续步骤不是直接对可回收对象进行回收，而是让所有存活的对象都向内存空间一端移动，然后直接清理掉边界以外的内存。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/oldghoast" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/oldghoast" target="_blank"><span class="text-dark">chenxb</span><small class="ml-1x"></small></a></h3>
+        <div>Java Developer</div>
+      </div>
+    </figure>
+  </div>
+</div>
 
 
+    </div>
+  </article>
   
     
-    
-    
-<a href="/2022/06/16/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> JVM运行时数据区
-</a>
-
 
   
-    
-    
-    
-<a href="/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> OutOfMemoryError异常
-</a>
+</div>
 
-
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
   
+  <ul class="pager pull-left">
     
     
-    
-<a href="/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T05:44:56.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 类加载器
-</a>
-
-
-  
+    <li class="next">
+      <a href="/2022/06/16/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" title="JVM运行时数据区"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
     
     
-    
-<a href="/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-01T02:42:17.000Z" itemprop="datePublished">2022-06-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 类的生命周期
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/24/%E6%B5%85%E8%B0%88%E5%B7%A5%E5%8E%82%E4%B8%8E%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-24T05:43:46.000Z" itemprop="datePublished">2022-05-24</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 浅谈工厂与建造者模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/22/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-22T05:43:46.000Z" itemprop="datePublished">2022-05-22</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 单例模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/21/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-21T05:43:46.000Z" itemprop="datePublished">2022-05-21</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 建造者模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/20/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-20T05:43:46.000Z" itemprop="datePublished">2022-05-20</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 抽象工厂
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/19/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-19T05:43:46.000Z" itemprop="datePublished">2022-05-19</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 工厂模式
-</a>
-
-
+  </ul>
   
   
-    </div></div></div></section>
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
   
 
-	    </div>
-  	</article>
-  	
-    
-    <nav class="bar bar-footer clearfix" data-stick-bottom>
-        <div class="bar-inner">
-        <ul class="pager pull-left">
-            
-            <li class="prev disabled">
-                <a href="javascript:;">
-                    <i class="icon icon-angle-left"></i>
-                    上一页
-                </a>
-            </li>
-            
-            
-            <li class="next">
-                <a href="/archives/2022/page/2/">
-                    下一页
-                    <i class="icon icon-angle-right"></i>
-                </a>
-            </li>
-            
-        </ul>
-            <div class="total-article bar-right">Page 1 of 2</div>
-        </div>
-    </nav>
-    
- 	
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -462,6 +448,10 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+
+
+   
 
 
 

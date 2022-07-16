@@ -17,16 +17,23 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>归档: 2022 | Blog</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Chenxb&#39;s Blog">
-<meta property="og:url" content="http://example.com/archives/2022/index.html">
+  <title>类的生命周期 | Blog</title>
+  <meta name="description" content="类的生命周期定义：指一个class文件从加载到卸载的过程   生命周期：加载、连接、初始化、使用、卸载    加载：找到需要加载的类并把类的信息加载到方法区中（类模板），然后在堆内存中实例化一个java.lang.Class对象，作为该类访问入口  连接：一般会与加载阶段和初始化阶段交叉进行，主要做一些加载后的验证工作和初始化前的准备工作，可以分为以下3个步骤  验证：验证类是否合法（文件格式验证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类的生命周期">
+<meta property="og:url" content="http://example.com/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/index.html">
 <meta property="og:site_name" content="Chenxb&#39;s Blog">
+<meta property="og:description" content="类的生命周期定义：指一个class文件从加载到卸载的过程   生命周期：加载、连接、初始化、使用、卸载    加载：找到需要加载的类并把类的信息加载到方法区中（类模板），然后在堆内存中实例化一个java.lang.Class对象，作为该类访问入口  连接：一般会与加载阶段和初始化阶段交叉进行，主要做一些加载后的验证工作和初始化前的准备工作，可以分为以下3个步骤  验证：验证类是否合法（文件格式验证">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://cdn.oldghoast.cn/202202194234.png">
+<meta property="og:image" content="http://cdn.oldghoast.cn/1335504117_6784.jpg">
+<meta property="article:published_time" content="2022-06-01T02:42:17.000Z">
+<meta property="article:modified_time" content="2022-07-16T10:43:09.359Z">
 <meta property="article:author" content="chenxb">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://cdn.oldghoast.cn/202202194234.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/archives/2022/index.html">
+  <link rel="canonical" href="http://example.com/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/index.html">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -261,164 +268,149 @@
   
   
 <main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">归档: 2022</h1>
-	      <p class="text-muted">共 17 篇文章</p>
-	    </header>
-	    <div class="article-body">
-	      
-  
-  
+  <div class="content">
+  <article id="post-类的生命周期" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      类的生命周期
+    </h1>
+  
+
       
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2022" aria-expanded="true">
-              <i class="icon icon-calendar-plus text-active"></i><i class="icon icon-calendar-minus text"></i>
-              2022
-            </a>
-            <!-- <a href="/archives/2022" class="archive-year">2022</a> -->
-          </h3>
-        </div>
-        <div id="collapse2022" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2022">
-        <div class="panel-body">
-          <div class="collection">
-    
-    
-<a href="/2022/06/20/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%EF%BC%88GC%EF%BC%89/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-20T11:44:30.000Z" itemprop="datePublished">2022-06-20</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 垃圾收集（GC）
-</a>
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="article-date">
+	  <time datetime="2022-06-01T02:42:17.000Z" itemprop="datePublished">2022-06-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JVM/">JVM</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h4 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h4><p>定义：指一个class文件从加载到卸载的过程</p>
+<img src="http://cdn.oldghoast.cn/202202194234.png" style="margin-left:0px;" />
+
+<p>生命周期：加载、连接、初始化、使用、卸载</p>
+<img src="http://cdn.oldghoast.cn/1335504117_6784.jpg" style="margin-left:0px;" />
+
+<ol>
+<li><p>加载：找到需要加载的类并把类的信息加载到方法区中（类模板），然后在堆内存中实例化一个java.lang.Class对象，作为该类访问入口</p>
+</li>
+<li><p>连接：一般会与加载阶段和初始化阶段交叉进行，主要做一些加载后的验证工作和初始化前的准备工作，可以分为以下3个步骤</p>
+<ul>
+<li>验证：验证类是否合法（文件格式验证、元数据验证、字节码验证、符号引用验证）</li>
+<li>准备：静态变量初始化默认值（null、0）</li>
+<li>解析：将常量池中的符号引用转换为直接引用（jvm会将所有的类或接口名、字段名、方法名转换为具体的内存地址）<ul>
+<li>NoSuchFieldError</li>
+<li>IllegalaccessError</li>
+<li>NoSuchMethodError</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>初始化：类初始化是类加载过程的最后一步，此阶段才开始执行Java程序代码</p>
+<p>如果一个类被直接引用就会触发类的初始化</p>
+<ul>
+<li>直接引用：<ul>
+<li>通过new关键字实例化对象、读取或设置类的静态变量、调用类的静态方法</li>
+<li>通过反射执行上述3种行为</li>
+<li>初始化子类时会触发父类的初始化</li>
+<li>作为程序入口直接运行（直接调用main方法）</li>
+</ul>
+</li>
+<li>被动引用：<ul>
+<li>引用父类的静态字段只会初始化父类，不会初始化子类</li>
+<li>定义类数组</li>
+<li>引用类的常量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>使用：使用该类所提供的功能，其中包括主动引用和被动引用</p>
+</li>
+<li><p>卸载：类的卸载过程其实就是在方法区中清空类信息，同时满足以下三个条件会被卸载</p>
+<ul>
+<li>该类实例被GC</li>
+<li>该类加载器被GC</li>
+<li>该类对应的java.lang.Class对象没有任何地方被引用</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/oldghoast" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/oldghoast" target="_blank"><span class="text-dark">chenxb</span><small class="ml-1x"></small></a></h3>
+        <div>Java Developer</div>
+      </div>
+    </figure>
+  </div>
+</div>
 
 
+    </div>
+  </article>
   
     
-    
-    
-<a href="/2022/06/16/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> JVM运行时数据区
-</a>
-
 
   
-    
-    
-    
-<a href="/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> OutOfMemoryError异常
-</a>
+</div>
 
-
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
   
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="类加载器"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
     
     
-    
-<a href="/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T05:44:56.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 类加载器
-</a>
-
-
-  
+    <li class="next">
+      <a href="/2022/05/24/%E6%B5%85%E8%B0%88%E5%B7%A5%E5%8E%82%E4%B8%8E%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="浅谈工厂与建造者模式"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
     
     
-    
-<a href="/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-01T02:42:17.000Z" itemprop="datePublished">2022-06-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 类的生命周期
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/24/%E6%B5%85%E8%B0%88%E5%B7%A5%E5%8E%82%E4%B8%8E%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-24T05:43:46.000Z" itemprop="datePublished">2022-05-24</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 浅谈工厂与建造者模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/22/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-22T05:43:46.000Z" itemprop="datePublished">2022-05-22</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 单例模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/21/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-21T05:43:46.000Z" itemprop="datePublished">2022-05-21</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 建造者模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/20/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-20T05:43:46.000Z" itemprop="datePublished">2022-05-20</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 抽象工厂
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/19/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-19T05:43:46.000Z" itemprop="datePublished">2022-05-19</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 工厂模式
-</a>
-
-
+  </ul>
   
   
-    </div></div></div></section>
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
   
 
-	    </div>
-  	</article>
-  	
-    
-    <nav class="bar bar-footer clearfix" data-stick-bottom>
-        <div class="bar-inner">
-        <ul class="pager pull-left">
-            
-            <li class="prev disabled">
-                <a href="javascript:;">
-                    <i class="icon icon-angle-left"></i>
-                    上一页
-                </a>
-            </li>
-            
-            
-            <li class="next">
-                <a href="/archives/2022/page/2/">
-                    下一页
-                    <i class="icon icon-angle-right"></i>
-                </a>
-            </li>
-            
-        </ul>
-            <div class="total-article bar-right">Page 1 of 2</div>
-        </div>
-    </nav>
-    
- 	
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -462,6 +454,10 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+
+
+   
 
 
 

@@ -17,16 +17,20 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>归档: 2022 | Blog</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Chenxb&#39;s Blog">
-<meta property="og:url" content="http://example.com/archives/2022/index.html">
+  <title>OutOfMemoryError异常 | Blog</title>
+  <meta name="description" content="实战：OutOfMemoryError异常 Java堆溢出 Java堆用于存储对象实例，我们只要不断地创建对象，总容量触及最大堆的容量限制后就会产生内存溢出异常 解决思路：  通过内存映像分析工具（如Eclipse Memory Analyzer）对Dump出来的堆转储快照进行分析 分析内存中导致OOM的对象是否是必要的，也就是确定是内存泄漏还是内存溢出 如果是内存泄漏，可进一步通过工具查看对象到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OutOfMemoryError异常">
+<meta property="og:url" content="http://example.com/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/index.html">
 <meta property="og:site_name" content="Chenxb&#39;s Blog">
+<meta property="og:description" content="实战：OutOfMemoryError异常 Java堆溢出 Java堆用于存储对象实例，我们只要不断地创建对象，总容量触及最大堆的容量限制后就会产生内存溢出异常 解决思路：  通过内存映像分析工具（如Eclipse Memory Analyzer）对Dump出来的堆转储快照进行分析 分析内存中导致OOM的对象是否是必要的，也就是确定是内存泄漏还是内存溢出 如果是内存泄漏，可进一步通过工具查看对象到">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-16T07:44:57.000Z">
+<meta property="article:modified_time" content="2022-07-16T10:43:29.195Z">
 <meta property="article:author" content="chenxb">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/archives/2022/index.html">
+  <link rel="canonical" href="http://example.com/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/index.html">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -261,164 +265,137 @@
   
   
 <main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">归档: 2022</h1>
-	      <p class="text-muted">共 17 篇文章</p>
-	    </header>
-	    <div class="article-body">
-	      
-  
-  
+  <div class="content">
+  <article id="post-OutOfMemoryError异常" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OutOfMemoryError异常
+    </h1>
+  
+
       
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2022" aria-expanded="true">
-              <i class="icon icon-calendar-plus text-active"></i><i class="icon icon-calendar-minus text"></i>
-              2022
-            </a>
-            <!-- <a href="/archives/2022" class="archive-year">2022</a> -->
-          </h3>
-        </div>
-        <div id="collapse2022" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2022">
-        <div class="panel-body">
-          <div class="collection">
-    
-    
-<a href="/2022/06/20/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%EF%BC%88GC%EF%BC%89/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-20T11:44:30.000Z" itemprop="datePublished">2022-06-20</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 垃圾收集（GC）
-</a>
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/" class="article-date">
+	  <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JVM/">JVM</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h4 id="实战：OutOfMemoryError异常"><a href="#实战：OutOfMemoryError异常" class="headerlink" title="实战：OutOfMemoryError异常"></a>实战：OutOfMemoryError异常</h4><ol>
+<li><p>Java堆溢出</p>
+<p>Java堆用于存储对象实例，我们只要不断地创建对象，总容量触及最大堆的容量限制后就会产生内存溢出异常</p>
+<p>解决思路：</p>
+<ul>
+<li>通过内存映像分析工具（如Eclipse Memory Analyzer）对Dump出来的堆转储快照进行分析</li>
+<li>分析内存中导致OOM的对象是否是必要的，也就是确定是内存泄漏还是内存溢出</li>
+<li>如果是内存泄漏，可进一步通过工具查看对象到GC的引用链，导致垃圾收集器无法回收它们</li>
+<li>如果是内存溢出，就应当检查Java虚拟机的堆参数（-Xms与-Xmx）设置，与机器的内存对比，看看是否还有向上调整的空间。再从代码上检查是否存在某些对象生命周期过长、持有状态时间过长、存储结构设计不合理等情况，尽量减少程序运行期的内存消耗</li>
+</ul>
+</li>
+<li><p>虚拟机栈和本地方法栈溢出</p>
+<p>由于HotSpot虚拟机中并不区分虚拟机栈和本地方法栈，因此对于HotSpot来说，-Xoss参数（设置本地方法栈大小）虽然存在，但实际上是没有任何效果的，栈容量只能由-Xss参数来设定。</p>
+<p>关于虚拟机栈和本地方法栈，在《Java虚拟机规范》中描述了两种异常：</p>
+<ul>
+<li>如果线程请求的栈深度大于虚拟机所允许的最大深度，将抛出StackOverflowError异常</li>
+<li>如果虚拟机的栈内存允许动态扩展，当扩展栈容量无法申请到足够内存时，将抛出OutOfMemoryError异常</li>
+</ul>
+<p>虽然《Java虚拟机规范》明确允许Java虚拟机实现自行选择是否支持栈的动态扩展，但是HotSpot虚拟机的选择是不支持扩展。所以除非在创建线程申请内存时就因无法获得足够的内存而出现OutOfMemoryError异常，否则在线程运行时是不会因为扩展而导致内存溢出的，只会因为栈容量无法新的栈帧而导致StackOverflowError异常</p>
+<p>解决思路：</p>
+<ul>
+<li>出现StackOverflowError异常时，会有明确错误堆栈可供分析，相对而言比较容易定位到</li>
+</ul>
+</li>
+<li><p>方法区和运行时常量池溢出</p>
+<p>在JDK 8 以后，永久代便完全退出了历史舞台，元空间作为其代替者登场，使用本地内存，已经很难迫使虚拟机产生方法区的溢出异常了。</p>
+<p>不过HotSpot还是提供了一些参数作为元空间的防御措施，主要包括：</p>
+<ul>
+<li>-XX:MaxMetaspaceSize：设置元空间最大值</li>
+<li>-XX:MetaspaceSize：指定元空间的初始空间大小</li>
+<li>-XX:MinMetaspaceFreeRatio：在垃圾收集之后控制最小的元空间剩余容量的百分比</li>
+</ul>
+</li>
+<li><p>本机直接内存溢出</p>
+<p>由直接内存导致的内存溢出，一个明显的特征是在Heap Dump文件中不会看见有什么明显的异常情况，如果发现内存溢出后产生的Dump文件很小，而程序又直接或间接使用了DirectMemory，那就可以考虑检查一下直接内存方面的原因</p>
+</li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/oldghoast" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/oldghoast" target="_blank"><span class="text-dark">chenxb</span><small class="ml-1x"></small></a></h3>
+        <div>Java Developer</div>
+      </div>
+    </figure>
+  </div>
+</div>
 
 
+    </div>
+  </article>
   
     
-    
-    
-<a href="/2022/06/16/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> JVM运行时数据区
-</a>
-
 
   
-    
-    
-    
-<a href="/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> OutOfMemoryError异常
-</a>
+</div>
 
-
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
   
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/06/16/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" title="JVM运行时数据区"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
     
     
-    
-<a href="/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T05:44:56.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 类加载器
-</a>
-
-
-  
+    <li class="next">
+      <a href="/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="类加载器"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
     
     
-    
-<a href="/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-01T02:42:17.000Z" itemprop="datePublished">2022-06-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 类的生命周期
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/24/%E6%B5%85%E8%B0%88%E5%B7%A5%E5%8E%82%E4%B8%8E%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-24T05:43:46.000Z" itemprop="datePublished">2022-05-24</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 浅谈工厂与建造者模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/22/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-22T05:43:46.000Z" itemprop="datePublished">2022-05-22</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 单例模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/21/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-21T05:43:46.000Z" itemprop="datePublished">2022-05-21</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 建造者模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/20/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-20T05:43:46.000Z" itemprop="datePublished">2022-05-20</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 抽象工厂
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/19/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-19T05:43:46.000Z" itemprop="datePublished">2022-05-19</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 工厂模式
-</a>
-
-
+  </ul>
   
   
-    </div></div></div></section>
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
   
 
-	    </div>
-  	</article>
-  	
-    
-    <nav class="bar bar-footer clearfix" data-stick-bottom>
-        <div class="bar-inner">
-        <ul class="pager pull-left">
-            
-            <li class="prev disabled">
-                <a href="javascript:;">
-                    <i class="icon icon-angle-left"></i>
-                    上一页
-                </a>
-            </li>
-            
-            
-            <li class="next">
-                <a href="/archives/2022/page/2/">
-                    下一页
-                    <i class="icon icon-angle-right"></i>
-                </a>
-            </li>
-            
-        </ul>
-            <div class="total-article bar-right">Page 1 of 2</div>
-        </div>
-    </nav>
-    
- 	
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -462,6 +439,10 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+
+
+   
 
 
 

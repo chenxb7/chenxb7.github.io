@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>浅谈工厂与建造者模式 | Blog</title>
+  <meta name="description" content="浅谈工厂与建造者模式一、前言  在GOF23种设计模式中，有两种涉及工厂的设计模式，分别为：工厂方法和抽象工厂。 当然，还有一种简单工厂，但它并不属于23种设计模式之中   二、为什么用工厂模式  使对象的创建和使用分离。调用类只需关注被调用类的具体功能方法，而创建则交给工厂类实现就行。 降低代码重复率，如果对象的创建比较复杂、很多地方都用的到，那么工厂模式可以减少很多重复代码。 易于维护，如果需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈工厂与建造者模式">
+<meta property="og:url" content="http://example.com/2022/05/24/%E6%B5%85%E8%B0%88%E5%B7%A5%E5%8E%82%E4%B8%8E%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Chenxb&#39;s Blog">
+<meta property="og:description" content="浅谈工厂与建造者模式一、前言  在GOF23种设计模式中，有两种涉及工厂的设计模式，分别为：工厂方法和抽象工厂。 当然，还有一种简单工厂，但它并不属于23种设计模式之中   二、为什么用工厂模式  使对象的创建和使用分离。调用类只需关注被调用类的具体功能方法，而创建则交给工厂类实现就行。 降低代码重复率，如果对象的创建比较复杂、很多地方都用的到，那么工厂模式可以减少很多重复代码。 易于维护，如果需">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://cdn.oldghoast.cn/Snipaste_2021-07-13_21-53-38.png">
+<meta property="article:published_time" content="2022-05-24T05:43:46.000Z">
+<meta property="article:modified_time" content="2022-07-16T10:41:04.331Z">
+<meta property="article:author" content="chenxb">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://cdn.oldghoast.cn/Snipaste_2021-07-13_21-53-38.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2022/05/24/%E6%B5%85%E8%B0%88%E5%B7%A5%E5%8E%82%E4%B8%8E%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/index.html">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/oldghoast" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">chenxb</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span class="category-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JVM/">JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/20/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%EF%BC%88GC%EF%BC%89/" class="title">垃圾收集（GC）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-20T11:44:30.000Z" itemprop="datePublished">2022-06-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JVM/">JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/16/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" class="title">JVM运行时数据区</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JVM/">JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/" class="title">OutOfMemoryError异常</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JVM/">JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" class="title">类加载器</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-16T05:44:56.000Z" itemprop="datePublished">2022-06-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JVM/">JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="title">类的生命周期</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-01T02:42:17.000Z" itemprop="datePublished">2022-06-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-浅谈工厂与建造者模式" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      浅谈工厂与建造者模式
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/24/%E6%B5%85%E8%B0%88%E5%B7%A5%E5%8E%82%E4%B8%8E%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="article-date">
+	  <time datetime="2022-05-24T05:43:46.000Z" itemprop="datePublished">2022-05-24</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/24/%E6%B5%85%E8%B0%88%E5%B7%A5%E5%8E%82%E4%B8%8E%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h3 id="浅谈工厂与建造者模式"><a href="#浅谈工厂与建造者模式" class="headerlink" title="浅谈工厂与建造者模式"></a>浅谈工厂与建造者模式</h3><h4 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h4><blockquote>
+<ul>
+<li>在GOF23种设计模式中，有两种涉及工厂的设计模式，分别为：工厂方法和抽象工厂。</li>
+<li>当然，还有一种简单工厂，但它并不属于23种设计模式之中</li>
+</ul>
+</blockquote>
+<h4 id="二、为什么用工厂模式"><a href="#二、为什么用工厂模式" class="headerlink" title="二、为什么用工厂模式"></a>二、为什么用工厂模式</h4><blockquote>
+<ul>
+<li>使对象的创建和使用分离。调用类只需关注被调用类的具体功能方法，而创建则交给工厂类实现就行。</li>
+<li>降低代码重复率，如果对象的创建比较复杂、很多地方都用的到，那么工厂模式可以减少很多重复代码。</li>
+<li>易于维护，如果需求有改动，则只要改工厂类就行了。</li>
+</ul>
+</blockquote>
+<h4 id="三、相同点"><a href="#三、相同点" class="headerlink" title="三、相同点"></a>三、相同点</h4><blockquote>
+<ul>
+<li>都为创建型模式，即处理对象创建的设计模式</li>
+</ul>
+</blockquote>
+<h4 id="四、简单工厂"><a href="#四、简单工厂" class="headerlink" title="四、简单工厂"></a>四、简单工厂</h4><blockquote>
+<ul>
+<li>比如说我现在需要生产不同的产品，比如手机、电脑等，那么简单工厂会怎么做呢？</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//产品工厂类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProductFactory</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> Product <span class="title function_">getProduct</span><span class="params">(String type)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;computer&quot;</span>.equalsIgnoreCase(type))&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ComputerProduct</span>();</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;mobile&quot;</span>.equalsIgnoreCase(type))&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MobileProduct</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SimpleFactoryTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">ProductFactory</span> <span class="variable">productFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ProductFactory</span>();</span><br><span class="line">    <span class="type">ComputerProduct</span> <span class="variable">computerProduct</span> <span class="operator">=</span> productFactory.getProduct(<span class="string">&quot;computer&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>所有产品的创建都由一个工厂类来实现</li>
+<li>优点：只有一个工厂类，代码量少</li>
+<li>缺点：需要新增产品时，必须改工厂类代码，违反开闭原则</li>
+</ul>
+</blockquote>
+<h4 id="五、工厂方法"><a href="#五、工厂方法" class="headerlink" title="五、工厂方法"></a>五、工厂方法</h4><blockquote>
+<ul>
+<li>简单工厂是只创建一个工厂类，而工厂方法是每种产品都有一个自己的工厂类</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先有个总的工厂类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Factory</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">abstract</span> Product <span class="title function_">getProduct</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//手机工厂类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">MobileFactory</span> <span class="keyword">extends</span> <span class="title class_">Factory</span> &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> Product <span class="title function_">getProduct</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MobileProduct</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//电脑工厂类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">ComputerFactory</span> <span class="keyword">extends</span> <span class="title class_">Factory</span> &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> Product <span class="title function_">getProduct</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ComputerProduct</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FactoryMethodTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">Factory</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ComputerFactory</span>();</span><br><span class="line">    <span class="type">ComputerProduct</span> <span class="variable">computerProduct</span> <span class="operator">=</span> ComputerFactory.getProduct();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>优点：新增产品时，只需增加产品工厂和具体产品类就行了</li>
+<li>缺点：需要编写额外代码，增加工作量</li>
+</ul>
+</blockquote>
+<h4 id="六、抽象工厂"><a href="#六、抽象工厂" class="headerlink" title="六、抽象工厂"></a>六、抽象工厂</h4><blockquote>
+<ul>
+<li>工厂方法模式的工厂是创建出<strong>一种</strong>产品，而抽象工厂是创建出<strong>一类</strong>产品。什么是一类产品？比如手机、电脑都有不同的品牌，苹果的手机、电脑是一类产品，三星的手机、电脑又是另一类产品。</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先总的工厂类生产电脑、手机</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ProductFactory</span> &#123;</span><br><span class="line">    ComputerProduct <span class="title function_">getComputerProduct</span><span class="params">()</span>;</span><br><span class="line">    MobileProduct <span class="title function_">getMobileProduct</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//苹果类产品</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppleFactory</span> <span class="keyword">implements</span> <span class="title class_">ProductFactory</span> &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> ComputerProduct <span class="title function_">getComputerProduct</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AppleComputerProduct</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> MobileProduct <span class="title function_">getMobileProduct</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AppleMobileProduct</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//三星类产品</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SamsungFactory</span> <span class="keyword">implements</span> <span class="title class_">ProductFactory</span> &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> ComputerProduct <span class="title function_">getComputerProduct</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SamsungComputerProduct</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> MobileProduct <span class="title function_">getMobileProduct</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SamsungMobileProduct</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AbstractFactoryTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">ProductFactory</span> <span class="variable">productFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AppleFactory</span>();</span><br><span class="line">    <span class="type">AppleComputerProduct</span> <span class="variable">appleComputerProduct</span> <span class="operator">=</span> productFactory.getComputerProduct();</span><br><span class="line">    <span class="type">AppleMobileProduct</span> <span class="variable">appleMobileProduct</span> <span class="operator">=</span> productFactory.getMobileProduct();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>缺点：难以扩展产品族，需要新增大量代码</li>
+</ul>
+</blockquote>
+<h4 id="七、建造者模式"><a href="#七、建造者模式" class="headerlink" title="七、建造者模式"></a>七、建造者模式</h4><blockquote>
+<ul>
+<li>定义：指将一个复杂对象的构造与它的表示分离，使同样的构建过程可以创建不同的表示</li>
+<li>个人解析：将一个复杂的对象拆分成若干个简单对象，由调用类通过一步步构造简单对象逐步生成复杂对象。</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>建造者模式有四种角色：<ul>
+<li>指挥者</li>
+<li>抽象建造者（通常会包含一个返回复杂对象的方法）</li>
+<li>具体建造者</li>
+<li>产品</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p><img src="http://cdn.oldghoast.cn/Snipaste_2021-07-13_21-53-38.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指挥者</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Director</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> FoodPackageBuilder foodPackageBuilder;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setFoodPackageBuilder</span><span class="params">(FoodPackageBuilder foodPackageBuilder)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.foodPackageBuilder = foodPackageBuilder;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> FoodPackage <span class="title function_">createFoodPackage</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.foodPackageBuilder.buildFood1();</span><br><span class="line">    <span class="built_in">this</span>.foodPackageBuilder.buildFood2();</span><br><span class="line">    <span class="built_in">this</span>.foodPackageBuilder.buildFood3();</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.foodPackageBuilder.makeFoodPackage();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//抽象建造者</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">FoodPackageBuilder</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">buildFood1</span><span class="params">()</span>;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">buildFood2</span><span class="params">()</span>;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">buildFood3</span><span class="params">()</span>;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">abstract</span> FoodPackage <span class="title function_">makeFoodPackage</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//具体建造者</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FoodPackageActualBuilder</span> <span class="keyword">extends</span> <span class="title class_">FoodPackageBuilder</span> &#123;</span><br><span class="line">  <span class="type">FoodPackage</span> <span class="variable">foodPackage</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FoodPackage</span>();</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">buildFood1</span><span class="params">()</span> &#123;</span><br><span class="line">    foodPackage.setFood1(<span class="string">&quot;food1&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">buildFood2</span><span class="params">()</span> &#123;</span><br><span class="line">    foodPackage.setFood1(<span class="string">&quot;food2&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">buildFood3</span><span class="params">()</span> &#123;</span><br><span class="line">    foodPackage.setFood1(<span class="string">&quot;food3&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> FoodPackage <span class="title function_">makeFoodPackage</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> foodPackage;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//产品</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FoodPackage</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> String food1;</span><br><span class="line">  <span class="keyword">private</span> String food2;</span><br><span class="line">  <span class="keyword">private</span> String food3;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getFood1</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> food1;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setFood1</span><span class="params">(String food1)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.food1 = food1;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getFood2</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> food2;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setFood2</span><span class="params">(String food2)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.food2 = food2;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getFood3</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> food3;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setFood3</span><span class="params">(String food3)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.food3 = food3;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BuilderTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">FoodPackageBuilder</span> <span class="variable">foodPackageBuilder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FoodPackageActualBuilder</span>();</span><br><span class="line">    <span class="type">Director</span> <span class="variable">director</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Director</span>();</span><br><span class="line">    director.setFoodPackageBuilder(foodPackageBuilder);</span><br><span class="line">    <span class="type">FoodPackage</span> <span class="variable">foodPackage</span> <span class="operator">=</span> director.createFoodPackage();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="八、总结"><a href="#八、总结" class="headerlink" title="八、总结"></a>八、总结</h4><blockquote>
+<ul>
+<li><p>简单工厂：唯一工厂类，一个产品抽象类，工厂类的创建方法依据入参判断并创建具体产品对象。</p>
+</li>
+<li><p>工厂方法：多个工厂类，一个产品抽象类，利用多态创建不同的产品对象，避免了大量的if-else判断。</p>
+</li>
+<li><p>抽象工厂：多个工厂类，多个产品抽象类，产品子类分组，同一个工厂实现类创建同组中的不同产品，减少了工厂子类的数量。</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>建造者模式与工厂模式的区别：<ul>
+<li>建造者更注重常见过程，工厂更注重结果</li>
+<li>工厂创建一种对象，建造者通过不同的建造顺序可以创造不同的对象</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/oldghoast" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/oldghoast" target="_blank"><span class="text-dark">chenxb</span><small class="ml-1x"></small></a></h3>
+        <div>Java Developer</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" title="类的生命周期"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/05/22/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" title="单例模式"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+</body>
+</html>

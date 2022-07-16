@@ -17,16 +17,22 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>归档: 2022 | Blog</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Chenxb&#39;s Blog">
-<meta property="og:url" content="http://example.com/archives/2022/index.html">
+  <title>类加载器 | Blog</title>
+  <meta name="description" content="类加载器 作用：根据一个类的全限定名读取该类的二进制字节流到JVM中，然后转换为一个与目标类对应的java.lang.Class对象实例  类的唯一性确认：对于任意一个类，都需要由它的类加载器和这个类本身一同确立其在JVM中的唯一性。也就是说即使两个类源于同一个Class文件，如果它们的类加载器不同，这两个类就必定不相等  分类： 对于JVM来说，只存在两种不同的类加载器：启动类加载器、其他类加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类加载器">
+<meta property="og:url" content="http://example.com/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/index.html">
 <meta property="og:site_name" content="Chenxb&#39;s Blog">
+<meta property="og:description" content="类加载器 作用：根据一个类的全限定名读取该类的二进制字节流到JVM中，然后转换为一个与目标类对应的java.lang.Class对象实例  类的唯一性确认：对于任意一个类，都需要由它的类加载器和这个类本身一同确立其在JVM中的唯一性。也就是说即使两个类源于同一个Class文件，如果它们的类加载器不同，这两个类就必定不相等  分类： 对于JVM来说，只存在两种不同的类加载器：启动类加载器、其他类加载">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://cdn.oldghoast.cn/2022022043432.png">
+<meta property="article:published_time" content="2022-06-16T05:44:56.000Z">
+<meta property="article:modified_time" content="2022-07-16T10:43:12.324Z">
 <meta property="article:author" content="chenxb">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://cdn.oldghoast.cn/2022022043432.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/archives/2022/index.html">
+  <link rel="canonical" href="http://example.com/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/index.html">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -261,164 +267,136 @@
   
   
 <main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">归档: 2022</h1>
-	      <p class="text-muted">共 17 篇文章</p>
-	    </header>
-	    <div class="article-body">
-	      
-  
-  
+  <div class="content">
+  <article id="post-类加载器" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      类加载器
+    </h1>
+  
+
       
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2022" aria-expanded="true">
-              <i class="icon icon-calendar-plus text-active"></i><i class="icon icon-calendar-minus text"></i>
-              2022
-            </a>
-            <!-- <a href="/archives/2022" class="archive-year">2022</a> -->
-          </h3>
-        </div>
-        <div id="collapse2022" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2022">
-        <div class="panel-body">
-          <div class="collection">
-    
-    
-<a href="/2022/06/20/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%EF%BC%88GC%EF%BC%89/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-20T11:44:30.000Z" itemprop="datePublished">2022-06-20</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 垃圾收集（GC）
-</a>
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" class="article-date">
+	  <time datetime="2022-06-16T05:44:56.000Z" itemprop="datePublished">2022-06-16</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JVM/">JVM</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h4 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h4><ol>
+<li><p>作用：根据一个类的全限定名读取该类的二进制字节流到JVM中，然后转换为一个与目标类对应的java.lang.Class对象实例</p>
+</li>
+<li><p>类的唯一性确认：对于任意一个类，都需要由它的类加载器和这个类本身一同确立其在JVM中的唯一性。也就是说即使两个类源于同一个Class文件，如果它们的类加载器不同，这两个类就必定不相等</p>
+</li>
+<li><p>分类：</p>
+<p>对于JVM来说，只存在两种不同的类加载器：启动类加载器、其他类加载器</p>
+<p>对于Java开发人员来说，可以分为四种类加载器：</p>
+<ul>
+<li>启动类加载器：用来加载Java核心类，负责加载$JAVA_HOME中jre&#x2F;lib&#x2F;rt.jar里所有的class，由C++实现，不是ClassLoader子类</li>
+<li>扩展类加载器：它负责加载JRE的扩展目录，lib&#x2F;ext或者由java.ext.dirs系统属性指定的目录中的JAR包的类</li>
+<li>应用程序类加载器：它负责在JVM启动时加载来自Java命令的-classpath选项、java.class.path系统属性，或者CLASSPATH环境变量所指定的JAR包和类路径</li>
+<li>自定义类加载器</li>
+</ul>
+</li>
+<li><p>类加载机制：</p>
+<ul>
+<li><p>全盘负责：当一个类加载器负责加载某个Class时，该Class所依赖和引用的其它Class也将由该类加载器负责加载</p>
+</li>
+<li><p>双亲委派：如果一个类加载器收到一个类加载请求，它并不会自己先加载，而是将该请求委托给父类加载器。如果父类加载器还有父类加载器，则进一步向上委托。若父类加载器可以完成加载任务则成功返回，否则子加载器才自己加载</p>
+<img src="http://cdn.oldghoast.cn/2022022043432.png" style="margin-left:0px;" />
+
+<ul>
+<li>优势：Java类随着它的加载器一起具备了一种带有优先级的层级关系，通过该层级关系可以避免重复加载，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次；其次是安全因素，java核心api定义的类不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心Java API发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的java.lang.Integer，而直接返回已加载过的Integer.class，这样便可以防止核心API库被随意篡改</li>
+<li>如何破坏：<ul>
+<li>自定义类加载器，重写loadClass方法</li>
+<li>使用线程上下文类加载器</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>缓存机制：保证所有加载过的类都会被缓存。当程序要使用某个Class时，类加载器会先从缓存中搜寻该Class，当缓存中没有时，JVM才会读取该类的Class文件并转换为对象</p>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/oldghoast" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/oldghoast" target="_blank"><span class="text-dark">chenxb</span><small class="ml-1x"></small></a></h3>
+        <div>Java Developer</div>
+      </div>
+    </figure>
+  </div>
+</div>
 
 
+    </div>
+  </article>
   
     
-    
-    
-<a href="/2022/06/16/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> JVM运行时数据区
-</a>
-
 
   
-    
-    
-    
-<a href="/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T07:44:57.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> OutOfMemoryError异常
-</a>
+</div>
 
-
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
   
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/06/16/OutOfMemoryError%E5%BC%82%E5%B8%B8/" title="OutOfMemoryError异常"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
     
     
-    
-<a href="/2022/06/16/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-16T05:44:56.000Z" itemprop="datePublished">2022-06-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 类加载器
-</a>
-
-
-  
+    <li class="next">
+      <a href="/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" title="类的生命周期"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
     
     
-    
-<a href="/2022/06/01/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-01T02:42:17.000Z" itemprop="datePublished">2022-06-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 类的生命周期
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/24/%E6%B5%85%E8%B0%88%E5%B7%A5%E5%8E%82%E4%B8%8E%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-24T05:43:46.000Z" itemprop="datePublished">2022-05-24</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 浅谈工厂与建造者模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/22/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-22T05:43:46.000Z" itemprop="datePublished">2022-05-22</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 单例模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/21/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-21T05:43:46.000Z" itemprop="datePublished">2022-05-21</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 建造者模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/20/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-20T05:43:46.000Z" itemprop="datePublished">2022-05-20</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 抽象工厂
-</a>
-
-
-  
-    
-    
-    
-<a href="/2022/05/19/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-19T05:43:46.000Z" itemprop="datePublished">2022-05-19</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 工厂模式
-</a>
-
-
+  </ul>
   
   
-    </div></div></div></section>
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
   
 
-	    </div>
-  	</article>
-  	
-    
-    <nav class="bar bar-footer clearfix" data-stick-bottom>
-        <div class="bar-inner">
-        <ul class="pager pull-left">
-            
-            <li class="prev disabled">
-                <a href="javascript:;">
-                    <i class="icon icon-angle-left"></i>
-                    上一页
-                </a>
-            </li>
-            
-            
-            <li class="next">
-                <a href="/archives/2022/page/2/">
-                    下一页
-                    <i class="icon icon-angle-right"></i>
-                </a>
-            </li>
-            
-        </ul>
-            <div class="total-article bar-right">Page 1 of 2</div>
-        </div>
-    </nav>
-    
- 	
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -462,6 +440,10 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+
+
+   
 
 
 
